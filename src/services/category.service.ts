@@ -1,13 +1,16 @@
 import { prisma } from '../config/prisma'
 
-export async function listCategoriesService(params: {
-  name?: string
-  description?: string
-  page?: number
-  limit?: number
-  sortBy?: string
-  order?: 'asc' | 'desc'
-}) {
+export async function listCategoriesService(
+  params: {
+    name?: string
+    description?: string
+    page?: number
+    limit?: number
+    sortBy?: string
+    order?: 'asc' | 'desc'
+  },
+  userId: string
+) {
   const {
     name = '',
     description = '',
@@ -18,6 +21,7 @@ export async function listCategoriesService(params: {
   } = params
 
   const where: any = {
+    userId,
     ...(name && { name: { contains: name, mode: 'insensitive' as const } }),
     ...(description && { description: { contains: description, mode: 'insensitive' as const } }),
   }
@@ -42,24 +46,37 @@ export async function listCategoriesService(params: {
   }
 }
 
-export async function createNewCategory(data: { name: string, description?: string }) {
+export async function createNewCategory(
+  data: { name: string, description?: string },
+  userId: string
+) {
   return prisma.category.create({
-    data,
-  })
-}
-
-export async function updateCategoryById(data: { id: string, name: string, description: string }) {
-  return prisma.category.update({
-    where: { id: data.id },
     data: {
       name: data.name,
-      description: data.description,
+      description: data.description ?? null,
+      userId,
     },
   })
 }
 
-export async function getCategoryById(id: string) {
-  return prisma.category.findUnique({
-    where: { id },
+export async function updateCategoryById(
+  data: { id: string, name: string, description: string },
+  userId: string
+) {
+  return prisma.category.update({
+    where: {
+      id: data.id,
+      userId,
+    },
+    data: {
+      name: data.name,
+      description: data.description ?? null,
+    },
+  })
+}
+
+export async function getCategoryById(id: string, userId: string) {
+  return prisma.category.findFirst({
+    where: { id, userId },
   })
 }

@@ -449,6 +449,176 @@
           }
         }
       }
+    },
+    "/token-balance": {
+      "get": {
+        "summary": "Listar balanços de tokens do usuário autenticado",
+        "tags": ["TokenBalance"],
+        "parameters": [
+          {
+            "name": "tokenId",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" },
+            "description": "Filtrar por ID do token"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 1 },
+            "description": "Número da página para paginação"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 10 },
+            "description": "Limite de itens por página"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "default": "operationAt" },
+            "description": "Campo de ordenação"
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"],
+              "default": "desc"
+            },
+            "description": "Ordem da ordenação"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de registros de balanço de tokens",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/TokenBalance" }
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "bearerAuth": [] }]
+      },
+      "post": {
+        "summary": "Registrar movimentação de token para usuário autenticado",
+        "tags": ["TokenBalance"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TokenBalanceInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registro de balanço criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenBalance" }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de validação"
+          }
+        },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/token-balance/{id}": {
+      "get": {
+        "tags": ["TokenBalance"],
+        "summary": "Buscar TokenBalance por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "TokenBalance encontrado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenBalance" }
+              }
+            }
+          },
+          "404": {
+            "description": "TokenBalance não encontrado"
+          }
+        }
+      },
+      "put": {
+        "tags": ["TokenBalance"],
+        "summary": "Update a TokenBalance by ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TokenBalanceInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TokenBalance" }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["TokenBalance"],
+        "summary": "Delete a TokenBalance by ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted successfully"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -500,7 +670,8 @@
             "type": "string"
           },
           "description": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
@@ -517,21 +688,7 @@
           "symbol": {
             "type": "string"
           },
-          "price": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "amount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "acquiredAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "notes": {
-            "type": "string"
-          },
+
           "categoryId": {
             "type": "string",
             "format": "uuid"
@@ -540,7 +697,7 @@
       },
       "TokenInput": {
         "type": "object",
-        "required": ["name", "symbol", "price", "amount", "acquiredAt", "categoryId"],
+        "required": ["name", "symbol", "categoryId"],
         "properties": {
           "name": {
             "type": "string"
@@ -548,25 +705,41 @@
           "symbol": {
             "type": "string"
           },
-          "price": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "amount": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "acquiredAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "notes": {
-            "type": "string"
-          },
+
           "categoryId": {
             "type": "string",
             "format": "uuid"
           }
+        }
+      },
+      "TokenBalance": {
+        "type": "object",
+        "properties": {
+          "tokenId": { "type": "string", "format": "uuid" },
+          "userId": { "type": "string", "format": "uuid" },
+          "amount": { "type": "number", "format": "decimal" },
+          "price": { "type": "number", "format": "decimal" },
+          "operationType": { "type": "string", "enum": ["BUY", "SELL"] },
+          "operationAt": { "type": "string", "format": "date-time" },
+          "notes": { "type": "string", "nullable": true }
+        }
+      },
+      "TokenBalanceInput": {
+        "type": "object",
+        "required": [
+          "tokenId",
+          "amount",
+          "price",
+          "operationType",
+          "operationAt"
+        ],
+        "properties": {
+          "tokenId": { "type": "string", "format": "uuid" },
+          "amount": { "type": "number", "format": "decimal" },
+          "price": { "type": "number", "format": "decimal" },
+          "operationType": { "type": "string", "enum": ["BUY", "SELL"] },
+          "operationAt": { "type": "string", "format": "date-time" },
+          "notes": { "type": "string", "nullable": true }
         }
       }
     }

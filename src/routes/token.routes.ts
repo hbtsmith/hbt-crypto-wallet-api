@@ -1,12 +1,13 @@
 import { Router } from 'express'
 import { createToken, listToken, getToken, updateToken, deleteToken } from '../controllers/token.controller'
+import { authMiddleware } from '../middlewares/auth.middleware'
 
 const router = Router()
 
-router.post('/', createToken)
-router.get('/', listToken)
-router.get('/:id', getToken)
-router.put('/:id', updateToken)
-router.delete('/:id', deleteToken)
+router.post('/', authMiddleware, createToken)
+router.get('/', authMiddleware, listToken)
+router.get('/:id', authMiddleware, getToken)
+router.put('/:id', authMiddleware, updateToken)
+router.delete('/:id', authMiddleware, deleteToken)
 
 export default router

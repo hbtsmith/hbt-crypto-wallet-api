@@ -18,18 +18,30 @@ model Category {
   name        String
   description String?
   tokens      Token[]
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @db.Uuid
 }
 
 model Token {
-  id          String   @id @default(uuid()) @db.Uuid
-  name        String
-  symbol      String
-  price       Decimal  @db.Decimal(20, 10)
-  amount      Decimal  @db.Decimal(36, 18)
-  acquiredAt  DateTime
-  notes       String?
-  category    Category @relation(fields: [categoryId], references: [id])
-  categoryId  String   @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String
+  symbol     String
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String   @db.Uuid
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String   @db.Uuid
+  balances   TokenBalance[]
+}
+
+model TokenBalance {
+  id           String   @id @default(uuid()) @db.Uuid
+  price        Decimal  @db.Decimal(20, 10)
+  amount       Decimal  @db.Decimal(36, 18)
+  operationAt  DateTime
+  notes        String?
+  operationType OperationType
+  token        Token    @relation(fields: [tokenId], references: [id])
+  tokenId      String   @db.Uuid
 }
 
 model User {
@@ -38,4 +50,11 @@ model User {
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+  categories Category[]
+  tokens     Token[]
+}
+
+enum OperationType {
+  BUY
+  SELL
 }

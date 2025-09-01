@@ -22,7 +22,7 @@ export async function listCategories(req: Request, res: Response) {
       limit: Number(limit),
       sortBy: String(sortBy),
       order: order === 'desc' ? 'desc' : 'asc'
-    })
+    }, req.user!.id)
 
     return res.status(200).json(result)
   } catch (error) {
@@ -40,7 +40,7 @@ export async function createCategory(req: Request, res: Response) {
     }
 
     const { name, description } = req.body
-    const category = await createNewCategory({ name, description })
+    const category = await createNewCategory({ name, description }, req.user!.id)
     res.status(201).json(category)
 }
 
@@ -56,7 +56,7 @@ export async function updateCategory(req: Request, res: Response) {
         return res.status(400).json({ error });
     }
 
-    const category = await updateCategoryById({ id, name, description })
+    const category = await updateCategoryById({ id, name, description }, req.user!.id)
     if (!category) {
         return res.status(404).json({ error: MESSAGES.CATEGORY.NOT_FOUND })
     }
@@ -69,7 +69,7 @@ export async function getCategory(req: Request, res: Response) {
     if (typeof id !== 'string') {
         return res.status(400).json({ error: MESSAGES.CATEGORY.INVALID_ID })
     }
-    const category = await getCategoryById(id)
+    const category = await getCategoryById(id, req.user!.id)
     if (!category) {
         return res.status(404).json({ error: MESSAGES.CATEGORY.NOT_FOUND })
     }

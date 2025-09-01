@@ -17,7 +17,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
 
   try {
     const decoded = verifyToken(token)
-    req.user = decoded as string | JwtPayload
+    req.user = decoded as JwtPayload & { id: string }
     next()
   } catch (err) {
     return res.status(401).json({ message: MESSAGES.USER.TOKEN_INVALID })
