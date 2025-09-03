@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { validateTokenInput } from "../validators/token.validator";
 import {
   createTokenService,
@@ -36,7 +36,11 @@ export async function listToken(req: Request, res: Response) {
   }
 }
 
-export async function createToken(req: Request, res: Response) {
+export async function createToken(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const userId = req.user!.id;
 
   const error = validateTokenInput(req.body);
@@ -47,16 +51,16 @@ export async function createToken(req: Request, res: Response) {
   try {
     const token = await createTokenService(userId, req.body);
     return res.status(201).json(token);
-  } catch (err) {
-    if (err instanceof Error) {
-      return res.status(400).json({ error: err.message });
-    }
-
-    return res.status(500).json({ error: MESSAGES.TOKEN.CREATION_FAILED });
+  } catch (error) {
+    next(error);
   }
 }
 
-export async function getToken(req: Request, res: Response) {
+export async function getToken(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const userId = req.user!.id;
 
   const { id } = req.params;
@@ -66,15 +70,16 @@ export async function getToken(req: Request, res: Response) {
   try {
     const token = await getTokenService(userId, id);
     return res.status(200).json(token);
-  } catch (err) {
-    if (err instanceof Error) {
-      return res.status(404).json({ error: err.message });
-    }
-    return res.status(500).json({ error: MESSAGES.TOKEN.NOT_FOUND });
+  } catch (error) {
+    next(error);
   }
 }
 
-export async function updateToken(req: Request, res: Response) {
+export async function updateToken(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const userId = req.user!.id;
 
   const { id } = req.params;
@@ -84,15 +89,16 @@ export async function updateToken(req: Request, res: Response) {
   try {
     const token = await updateTokenService(id, userId, req.body);
     return res.status(200).json(token);
-  } catch (err) {
-    if (err instanceof Error) {
-      return res.status(404).json({ error: err.message });
-    }
-    return res.status(500).json({ error: MESSAGES.TOKEN.NOT_FOUND });
+  } catch (error) {
+    next(error);
   }
 }
 
-export async function deleteToken(req: Request, res: Response) {
+export async function deleteToken(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const userId = req.user!.id;
 
   const { id } = req.params;
@@ -102,10 +108,7 @@ export async function deleteToken(req: Request, res: Response) {
   try {
     await deleteTokenService(id, userId);
     return res.status(204).send();
-  } catch (err) {
-    if (err instanceof Error) {
-      return res.status(404).json({ error: err.message });
-    }
-    return res.status(500).json({ error: MESSAGES.TOKEN.NOT_FOUND });
+  } catch (error) {
+    next(error);
   }
 }

@@ -1,5 +1,10 @@
 import { prisma } from "../config/prisma";
 import { MESSAGES } from "../messages";
+import {
+  NotFoundError,
+  ForbiddenError,
+  UnauthorizedError,
+} from "../helpers/api-errors";
 
 export async function listTokenService(
   userId: string,
@@ -62,7 +67,7 @@ export async function createTokenService(
   });
 
   if (!category) {
-    throw new Error(MESSAGES.CATEGORY.NOT_FOUND);
+    throw new NotFoundError(MESSAGES.CATEGORY.NOT_FOUND);
   }
 
   const tokenExists = await prisma.token.findFirst({
@@ -70,7 +75,7 @@ export async function createTokenService(
   });
 
   if (tokenExists) {
-    throw new Error(MESSAGES.TOKEN.ALREADY_EXISTS);
+    throw new UnauthorizedError(MESSAGES.TOKEN.ALREADY_EXISTS);
   }
 
   const token = await prisma.token.create({
@@ -94,7 +99,7 @@ export async function getTokenService(userId: string, id: string) {
     include: { balances: true },
   });
   if (!token) {
-    throw new Error(MESSAGES.TOKEN.NOT_FOUND);
+    throw new NotFoundError(MESSAGES.TOKEN.NOT_FOUND);
   }
   return token;
 }
@@ -113,7 +118,7 @@ export async function updateTokenService(
   });
 
   if (!token) {
-    throw new Error(MESSAGES.TOKEN.NOT_FOUND);
+    throw new NotFoundError(MESSAGES.TOKEN.NOT_FOUND);
   }
 
   if (data.symbol && data.symbol !== token.symbol) {
@@ -125,7 +130,7 @@ export async function updateTokenService(
       },
     });
     if (symbolExists) {
-      throw new Error(MESSAGES.TOKEN.ALREADY_EXISTS);
+      throw new ForbiddenError(MESSAGES.TOKEN.ALREADY_EXISTS);
     }
   }
 
@@ -134,7 +139,7 @@ export async function updateTokenService(
       where: { id: data.categoryId, userId },
     });
     if (!category) {
-      throw new Error(MESSAGES.CATEGORY.NOT_FOUND);
+      throw new NotFoundError(MESSAGES.CATEGORY.NOT_FOUND);
     }
   }
 
@@ -151,7 +156,7 @@ export async function deleteTokenService(id: string, userId: string) {
   });
 
   if (!tokenDelete) {
-    throw new Error(MESSAGES.TOKEN.NOT_FOUND);
+    throw new NotFoundError(MESSAGES.TOKEN.NOT_FOUND);
   }
 
   return prisma.token.delete({

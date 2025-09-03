@@ -16,6 +16,66 @@
     }
   ],
   "paths": {
+    "/token-balance/balance/{tokenId}/amount": {
+      "get": {
+        "summary": "Obter o total de amount do token",
+        "tags": ["TokenBalance"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "tokenId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" },
+            "description": "ID do token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Total de amount do token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "totalAmount": { "type": "number" } }
+                }
+              }
+            }
+          },
+          "404": { "description": "Token não encontrado" }
+        }
+      }
+    },
+    "/token-balance/balance/{tokenId}/value": {
+      "get": {
+        "summary": "Obter o valor total do token",
+        "tags": ["TokenBalance"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "tokenId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" },
+            "description": "ID do token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Valor total do token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "totalValue": { "type": "number" } }
+                }
+              }
+            }
+          },
+          "404": { "description": "Token não encontrado" }
+        }
+      }
+    },
     "/auth/register": {
       "post": {
         "summary": "Registrar novo usuário",

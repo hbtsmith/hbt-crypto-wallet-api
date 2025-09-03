@@ -7,6 +7,7 @@ import categoryRoutes from "./routes/category.routes";
 import tokenRoutes from "./routes/token.routes";
 import authRoutes from "./routes/auth.routes";
 import tokenBalance from "./routes/tokenBalance.routes";
+import { errorHandler } from "./middlewares/error.middleware";
 
 dotenv.config();
 
@@ -23,5 +24,7 @@ app.use("/categories", categoryRoutes);
 app.use("/tokens", tokenRoutes);
 app.use("/auth", authRoutes);
 app.use("/token-balance", tokenBalance);
+
+app.use(errorHandler);
 
 export default app;

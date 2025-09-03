@@ -17,6 +17,8 @@ export const MESSAGES = {
   },
   TOKEN_BALANCE: {
     NOT_FOUND: "Saldo de Token não encontrado.",
+    INSUFFICIENT_FUNDS_TO_SELL:
+      "Saldo insuficiente para realizar a operação de Venda.",
   },
   USER: {
     ALREADY_REGISTERED: "Usuário já registrado.",

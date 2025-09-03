@@ -1,5 +1,6 @@
 import { prisma } from "../config/prisma";
-import { NotFoundError } from "../helpers/api-errors";
+import { NotFoundError, ForbiddenError } from "../helpers/api-errors";
+import { operationTypeEnum } from "../helpers/api-consts-enum";
 import { MESSAGES } from "../messages";
 
 export async function createTokenBalanceService(
@@ -12,6 +13,24 @@ export async function createTokenBalanceService(
   });
 
   if (!token) throw new NotFoundError(MESSAGES.TOKEN.NOT_FOUND);
+
+  const tokenBalanceSum = await prisma.tokenBalance.aggregate({
+    where: { tokenId },
+    _sum: { amount: true },
+  });
+
+  const isOpSell = data.operationType == operationTypeEnum.SELL;
+  const actualBalance = tokenBalanceSum._sum.amount ?? 0;
+
+  if (isOpSell) {
+    if (actualBalance < data.amount) {
+      throw new ForbiddenError(
+        MESSAGES.TOKEN_BALANCE.INSUFFICIENT_FUNDS_TO_SELL
+      );
+    }
+
+    data.amount = -data.amount;
+  }
 
   const tokenBalance = await prisma.tokenBalance.create({
     data: {
@@ -136,4 +155,54 @@ export async function deleteTokenBalanceService(
   await prisma.tokenBalance.delete({
     where: { id: balanceId },
   });
+}
+
+export async function getTotalAmountBalanceService(
+  userId: string,
+  tokenId: string
+) {
+  const token = await prisma.token.findFirst({
+    where: { id: tokenId, userId },
+  });
+
+  if (!token) throw new NotFoundError(MESSAGES.TOKEN.NOT_FOUND);
+
+  const tokenBalanceSum = await prisma.tokenBalance.aggregate({
+    where: { tokenId },
+    _sum: { amount: true },
+  });
+
+  return tokenBalanceSum._sum.amount;
+}
+
+export async function getTotalValueBalanceService(
+  userId: string,
+  tokenId: string
+) {
+  const token = await prisma.token.findFirst({
+    where: { id: tokenId, userId },
+  });
+
+  if (!token) throw new NotFoundError(MESSAGES.TOKEN.NOT_FOUND);
+
+  const balances = await prisma.tokenBalance.findMany({ where: { tokenId } });
+
+  const total = balances.reduce((sum, b) => {
+    const amount =
+      typeof b.amount === "object" && "toNumber" in b.amount
+        ? b.amount.toNumber()
+        : Number(b.amount);
+    const price =
+      typeof b.price === "object" && "toNumber" in b.price
+        ? b.price.toNumber()
+        : Number(b.price);
+
+    let value = Math.abs(amount * price);
+    if (b.operationType === "BUY") {
+      value = -value;
+    }
+
+    return sum + value;
+  }, 0);
+  return total;
 }

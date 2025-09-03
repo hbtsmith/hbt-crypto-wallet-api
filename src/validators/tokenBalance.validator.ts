@@ -1,10 +1,5 @@
 import { MESSAGES } from "../messages";
 
-const operationTypeEnum = {
-  BUY: "BUY",
-  SELL: "SELL",
-} as const;
-
 export function validateTokenBalanceInput(data: {
   tokenId?: any;
   price?: any;
