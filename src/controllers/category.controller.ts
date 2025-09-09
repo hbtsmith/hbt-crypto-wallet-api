@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import {
   listCategoriesService,
   getCategoryById,
@@ -37,18 +37,34 @@ export async function listCategories(req: Request, res: Response) {
   }
 }
 
-export async function createCategory(req: Request, res: Response) {
+export async function createCategory(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const error = validateCategoryInput(req.body);
   if (error) {
     return res.status(400).json({ error });
   }
 
   const { name, description } = req.body;
-  const category = await createNewCategory({ name, description }, req.user!.id);
-  return res.status(201).json(category);
+
+  try {
+    const category = await createNewCategory(
+      { name, description },
+      req.user!.id
+    );
+    return res.status(201).json(category);
+  } catch (error) {
+    next(error);
+  }
 }
 
-export async function updateCategory(req: Request, res: Response) {
+export async function updateCategory(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const { id } = req.params;
   if (typeof id !== "string") {
     return res.status(400).json({ error: MESSAGES.CATEGORY.INVALID_ID });
@@ -60,15 +76,16 @@ export async function updateCategory(req: Request, res: Response) {
     return res.status(400).json({ error });
   }
 
-  const category = await updateCategoryById(
-    { id, name, description },
-    req.user!.id
-  );
-  if (!category) {
-    return res.status(404).json({ error: MESSAGES.CATEGORY.NOT_FOUND });
-  }
+  try {
+    const category = await updateCategoryById(
+      { id, name, description },
+      req.user!.id
+    );
 
-  return res.status(200).json(category);
+    return res.status(200).json(category);
+  } catch (error) {
+    next(error);
+  }
 }
 
 export async function getCategory(req: Request, res: Response) {

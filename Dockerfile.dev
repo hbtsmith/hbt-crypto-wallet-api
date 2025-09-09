@@ -1,0 +1,26 @@
+# Usa imagem base com Node
+FROM node:20-alpine
+
+# Habilita o Corepack (gerenciador de Yarn/Pnpm incluído no Node.js)
+RUN corepack enable
+
+# Garante a versão específica do Yarn
+RUN corepack prepare yarn@4.6.0 --activate
+
+# Cria diretório de trabalho
+WORKDIR /app
+
+# Copia arquivos de dependência
+COPY package.json yarn.lock ./
+
+# Instala as dependências com Yarn 4
+RUN yarn install
+
+# Copia todo o projeto
+COPY . .
+
+# Expõe a porta da aplicação
+EXPOSE 3000
+
+# Comando para iniciar o servidor
+CMD ["yarn", "dev"]

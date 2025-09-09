@@ -35,6 +35,8 @@ export const MESSAGES = {
       `O campo ${field} é obrigatório e deve ser uma data válida.`,
     REQUIRED_DECIMAL_FIELD: (field: string) =>
       `O campo ${field} é obrigatório e deve ser um número decimal válido.`,
+    REQUIRED_UUID_FIELD: (field: string) =>
+      `O campo ${field} é obrigatório e deve ser um UUID válido.`,
   },
   SYSTEM: {
     ERROR: "Erro no sistema.",

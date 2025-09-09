@@ -1,0 +1,30 @@
+FROM node:20-alpine
+
+# Diretório da aplicação
+WORKDIR /app
+
+# Copia apenas arquivos essenciais
+COPY package.json yarn.lock ./
+COPY prisma ./prisma
+COPY tsconfig.json ./
+COPY src ./src
+
+# Instala dependências de produção
+RUN corepack enable \
+  && corepack prepare yarn@4.6.0 --activate \
+  && yarn install --production
+
+# Gera Prisma Client para produção Linux
+RUN yarn prisma generate
+
+# Compila o projeto para JavaScript
+RUN yarn build
+
+# Define variáveis como ambiente
+ENV NODE_ENV=production
+
+# Expõe a porta da API
+EXPOSE 3000
+
+# Inicia a aplicação compilada
+CMD ["node", "dist/server.js"]
