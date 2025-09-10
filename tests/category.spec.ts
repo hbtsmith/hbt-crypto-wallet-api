@@ -3,8 +3,10 @@ import { beforeAll, afterAll, describe, it, expect } from "vitest";
 import app from "../src/app";
 import { prisma } from "../src/config/prisma";
 import { generateTestToken } from "./utils/generateTestToken";
+/**
+ * Objective here is not to cover 100% of the code, but to understand the dynamics of unit testing and API interactions.
+ */
 
-// Token que será usado em todos os testes
 let token: string;
 
 beforeAll(async () => {
@@ -12,7 +14,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await prisma.category.deleteMany(); // limpa categorias após os testes
+  await prisma.category.deleteMany();
 });
 
 describe("Category", () => {

@@ -1,4 +1,5 @@
 import { MESSAGES } from "../messages";
+import { operationTypeEnum } from "../helpers/api-consts-enum";
 
 export function validateTokenBalanceInput(data: {
   tokenId?: any;
@@ -13,10 +14,19 @@ export function validateTokenBalanceInput(data: {
     return MESSAGES.VALIDATION.REQUIRED_FIELD("tokenId");
   }
 
+  // Regex para validar UUID v4
+  const uuidV4Regex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (!uuidV4Regex.test(tokenId)) {
+    return MESSAGES.VALIDATION.REQUIRED_UUID_FIELD("tokenId");
+  }
+
   if (
     !operationType ||
     typeof operationType !== "string" ||
-    operationType.trim() === ""
+    operationType.trim() === "" ||
+    (operationType !== operationTypeEnum.SELL &&
+      operationType !== operationTypeEnum.BUY)
   ) {
     return MESSAGES.VALIDATION.REQUIRED_FIELD("operationType");
   }

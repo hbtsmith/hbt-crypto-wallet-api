@@ -17,15 +17,14 @@ export async function createTokenBalance(
   next: NextFunction
 ) {
   const userId = req.user!.id;
+  const tokenId = req.body!.tokenId;
   const error = validateTokenBalanceInput(req.body);
   if (error) {
     return res.status(400).json({ error });
   }
-
   try {
-    const tokenId = req.body.tokenId;
     if (!tokenId) {
-      return res.status(400).json({ error: MESSAGES.TOKEN.NOT_FOUND });
+      return res.status(404).json({ error: MESSAGES.TOKEN.NOT_FOUND });
     }
     const data = req.body;
     const tokenBalance = await createTokenBalanceService(userId, tokenId, data);
@@ -41,7 +40,13 @@ export async function listTokenBalance(
   next: NextFunction
 ) {
   const userId = req.user!.id;
-  const { tokenId, page, limit, sortBy, order } = req.query;
+  const {
+    tokenId,
+    page = 1,
+    limit = 10,
+    sortBy = "operationAt",
+    order = "desc",
+  } = req.query;
 
   if (!tokenId || typeof tokenId !== "string") {
     return res.status(400).json({ error: MESSAGES.TOKEN.NOT_FOUND });
@@ -55,6 +60,7 @@ export async function listTokenBalance(
     });
     return res.status(200).json(balances);
   } catch (error) {
+    console.log(error);
     return next(error);
   }
 }

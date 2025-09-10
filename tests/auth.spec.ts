@@ -4,6 +4,9 @@ import { describe, it, expect, beforeAll, beforeEach } from "vitest";
 import app from "../src/app";
 import { prisma } from "./vitest.setup";
 import { MESSAGES } from "../src/messages";
+/**
+ * Objective here is not to cover 100% of the code, but to understand the dynamics of unit testing and API interactions.
+ */
 
 beforeEach(async () => {
   await prisma.user.deleteMany();

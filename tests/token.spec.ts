@@ -4,18 +4,23 @@ import app from "../src/app";
 import { prisma } from "../src/config/prisma";
 import { generateTestToken } from "./utils/generateTestToken";
 
-let token: string;
+/**
+ * Objective here is not to cover 100% of the code, but to understand the dynamics of unit testing and API interactions.
+ */
+
+let authToken: string;
 let categoryId: string;
 
 async function generateTestTokenAndCategory(): Promise<
-  { token: string; categoryId: string } | { token: string; categoryId: string }
+  | { authToken: string; categoryId: string }
+  | { authToken: string; categoryId: string }
 > {
-  const token = await generateTestToken();
+  const authToken = await generateTestToken();
 
   // Cria categoria de teste
   const response = await request(app)
     .post("/categories")
-    .set("Authorization", `Bearer ${token}`)
+    .set("Authorization", `Bearer ${authToken}`)
     .send({
       name: "Network",
       description: "Category for project/tokens of Network",
@@ -23,18 +28,14 @@ async function generateTestTokenAndCategory(): Promise<
 
   const categoryId = response.body.id;
 
-  return { token, categoryId };
-
-  //   throw new Error("Function not implemented.");
+  return { authToken, categoryId };
 }
 
 beforeAll(async () => {
-  // Cria usuário de teste
-  ({ token, categoryId } = await generateTestTokenAndCategory());
+  ({ authToken, categoryId } = await generateTestTokenAndCategory());
 });
 
 afterAll(async () => {
-  // Cleanup: remove tokens, categorias e usuários
   await prisma.token.deleteMany();
   await prisma.category.deleteMany();
   await prisma.user.deleteMany();
@@ -42,11 +43,11 @@ afterAll(async () => {
 
 describe("Token", () => {
   it("Should create a new token linked to the category", async () => {
-    ({ token, categoryId } = await generateTestTokenAndCategory());
+    ({ authToken, categoryId } = await generateTestTokenAndCategory());
 
     const response = await request(app)
       .post("/tokens")
-      .set("Authorization", `Bearer ${token}`)
+      .set("Authorization", `Bearer ${authToken}`)
       .send({
         name: "Bitcoin",
         symbol: "BTC",
@@ -60,11 +61,11 @@ describe("Token", () => {
   });
 
   it("Should fail to create a token with invalid categoryId", async () => {
-    ({ token, categoryId } = await generateTestTokenAndCategory());
+    ({ authToken, categoryId } = await generateTestTokenAndCategory());
 
     const response = await request(app)
       .post("/tokens")
-      .set("Authorization", `Bearer ${token}`)
+      .set("Authorization", `Bearer ${authToken}`)
       .send({
         name: "InvalidToken",
         symbol: "INV",
@@ -75,12 +76,12 @@ describe("Token", () => {
     expect(response.body).toHaveProperty("error");
   });
 
-  it.only("Should list tokens from logged user", async () => {
-    ({ token, categoryId } = await generateTestTokenAndCategory());
+  it("Should list tokens from logged user", async () => {
+    ({ authToken, categoryId } = await generateTestTokenAndCategory());
 
     const response = await request(app)
       .get("/tokens")
-      .set("Authorization", `Bearer ${token}`);
+      .set("Authorization", `Bearer ${authToken}`);
     console.log("##########", response.body);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty("data");
@@ -89,5 +90,62 @@ describe("Token", () => {
     expect(response.body).toHaveProperty("limit");
     expect(response.body).toHaveProperty("totalPages");
     expect(Array.isArray(response.body.data)).toBe(true);
+  });
+
+  it("Should update a token successfully", async () => {
+    ({ authToken, categoryId } = await generateTestTokenAndCategory());
+
+    const responseCreate = await request(app)
+      .post("/tokens")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({
+        name: "Bitcoin",
+        symbol: "BTC",
+        categoryId: categoryId,
+      });
+
+    expect(responseCreate.status).toBe(201);
+    expect(responseCreate.body).toHaveProperty("id");
+    expect(responseCreate.body.name).toBe("Bitcoin");
+    expect(responseCreate.body.symbol).toBe("BTC");
+
+    const responseUpdate = await request(app)
+      .put(`/tokens/${responseCreate.body.id}`)
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({
+        name: "SOLANA",
+        symbol: "SOL",
+        categoryId: categoryId,
+      });
+
+    expect(responseUpdate.status).toBe(200);
+    expect(responseUpdate.body).toHaveProperty("id");
+    expect(responseUpdate.body.name).toBe("SOLANA");
+    expect(responseUpdate.body.symbol).toBe("SOL");
+  });
+
+  it("Should delete a token successfully", async () => {
+    ({ authToken, categoryId } = await generateTestTokenAndCategory());
+
+    const responseCreate = await request(app)
+      .post("/tokens")
+      .set("Authorization", `Bearer ${authToken}`)
+      .send({
+        name: "Bitcoin",
+        symbol: "BTC",
+        categoryId: categoryId,
+      });
+
+    expect(responseCreate.status).toBe(201);
+    expect(responseCreate.body).toHaveProperty("id");
+    expect(responseCreate.body.name).toBe("Bitcoin");
+    expect(responseCreate.body.symbol).toBe("BTC");
+
+    const responseDelete = await request(app)
+      .delete(`/tokens/${responseCreate.body.id}`)
+      .set("Authorization", `Bearer ${authToken}`)
+      .send();
+
+    expect(responseDelete.status).toBe(204);
   });
 });
