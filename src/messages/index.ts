@@ -22,6 +22,7 @@ export const MESSAGES = {
   },
   USER: {
     ALREADY_REGISTERED: "Usuário já registrado.",
+    REFRESH_TOKEN_REQUIRED: "Refresh token é obrigatório.",
     NOT_FOUND: "Usuário não encontrado.",
     INVALID_CREDENTIALS: "Credenciais inválidas.",
     TOKEN_INVALID: "Token inválido.",

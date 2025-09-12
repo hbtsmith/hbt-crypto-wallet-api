@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { registerService, loginService } from "../services/auth.service";
+import {
+  registerService,
+  loginService,
+  refreshTokenService,
+} from "../services/auth.service";
 import { registerSchema, loginSchema } from "../validators/auth.validator";
+import { MESSAGES } from "../messages";
 
 export async function register(
   req: Request,
@@ -33,7 +38,7 @@ export const login = async (
   const result = loginSchema.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({
-      error: "Dados inválidos",
+      error: MESSAGES.USER.INVALID_CREDENTIALS,
       issues: result.error.issues, // Mostra erros amigáveis
     });
   }
@@ -42,6 +47,27 @@ export const login = async (
   try {
     const loginResult = await loginService(email, password);
     return res.status(200).send(loginResult);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const refreshToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { refreshToken } = req.body;
+
+  if (!refreshToken) {
+    return res
+      .status(400)
+      .json({ error: MESSAGES.USER.REFRESH_TOKEN_REQUIRED });
+  }
+
+  try {
+    const newTokens = await refreshTokenService(refreshToken);
+    return res.status(200).json(newTokens);
   } catch (error) {
     return next(error);
   }

@@ -1,11 +1,30 @@
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || 'changeme'
+import type { Secret } from "jsonwebtoken";
+import { MESSAGES } from "../messages";
 
-export const generateToken = (payload: object) => {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' })
-}
+const JWT_SECRET: Secret = process.env.JWT_SECRET || "changeme";
+
+export const signAccessToken = (payload: object, expiresIn: string = "1h") => {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn } as jwt.SignOptions);
+};
+
+export const signRefreshToken = (payload: object, expiresIn: string = "7d") => {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn } as jwt.SignOptions);
+};
 
 export const verifyToken = (token: string) => {
-  return jwt.verify(token, JWT_SECRET)
-}
+  try {
+    return jwt.verify(token, JWT_SECRET);
+  } catch (error) {
+    throw new Error(MESSAGES.USER.TOKEN_INVALID);
+  }
+};
+
+export const verifyRefreshToken = (token: string) => {
+  try {
+    return jwt.verify(token, JWT_SECRET);
+  } catch (error) {
+    throw new Error(MESSAGES.USER.TOKEN_INVALID);
+  }
+};

@@ -187,22 +187,32 @@ export async function getTotalValueBalanceService(
 
   const balances = await prisma.tokenBalance.findMany({ where: { tokenId } });
 
-  const total = balances.reduce((sum, b) => {
-    const amount =
-      typeof b.amount === "object" && "toNumber" in b.amount
-        ? b.amount.toNumber()
-        : Number(b.amount);
-    const price =
-      typeof b.price === "object" && "toNumber" in b.price
-        ? b.price.toNumber()
-        : Number(b.price);
+  const total = balances.reduce(
+    (
+      sum: number,
+      b: {
+        amount: { toNumber: () => any };
+        price: { toNumber: () => any };
+        operationType: string;
+      }
+    ) => {
+      const amount =
+        typeof b.amount === "object" && "toNumber" in b.amount
+          ? b.amount.toNumber()
+          : Number(b.amount);
+      const price =
+        typeof b.price === "object" && "toNumber" in b.price
+          ? b.price.toNumber()
+          : Number(b.price);
 
-    let value = Math.abs(amount * price);
-    if (b.operationType === "BUY") {
-      value = -value;
-    }
+      let value = Math.abs(amount * price);
+      if (b.operationType === "BUY") {
+        value = -value;
+      }
 
-    return sum + value;
-  }, 0);
+      return sum + value;
+    },
+    0
+  );
   return total;
 }
