@@ -1,5 +1,5 @@
 # Usa imagem base com Node
-FROM node:20-alpine
+FROM node:20-bullseye
 
 # Habilita o Corepack (gerenciador de Yarn/Pnpm incluído no Node.js)
 RUN corepack enable
@@ -11,16 +11,25 @@ RUN corepack prepare yarn@4.6.0 --activate
 WORKDIR /app
 
 # Copia arquivos de dependência
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
 
+# 🛠️ Define variáveis de ambiente para Prisma (antes do generate)
+#ENV PRISMA_QUERY_ENGINE_LIBRARY=/app/node_modules/@prisma/client/libquery_engine-linux-musl-arm64-openssl-3.0.x.so.node
+#ENV PRISMA_QUERY_ENGINE_BINARY=/app/node_modules/prisma/engines/query-engine-linux-musl-arm64
+#ENV PRISMA_CLI_QUERY_ENGINE_TYPE=binary
 # Instala as dependências com Yarn 4
 RUN yarn install
+
 
 # Copia todo o projeto
 COPY . .
 
+# Gera o Prisma Client após instalar dependências
+RUN yarn prisma generate
+
 # Expõe a porta da aplicação
 EXPOSE 3000
+
 
 # Comando para iniciar o servidor
 CMD ["yarn", "dev"]

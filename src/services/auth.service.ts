@@ -27,7 +27,7 @@ export const registerService = async (
 
   const token = signAccessToken(
     { id: user.id, email: user.email },
-    `${accessTokenExpirationTime}s`
+    `${accessTokenExpirationTime}h`
   );
   return { token, user };
 };
@@ -49,7 +49,7 @@ export const loginService = async (email: string, password: string) => {
 
   const token = signAccessToken(
     { id: user.id, email: user.email },
-    `${accessTokenExpirationTime}s`
+    `${accessTokenExpirationTime}h`
   );
   const refreshToken = signRefreshToken(
     { id: user.id, email: user.email },
@@ -94,7 +94,7 @@ export const refreshTokenService = async (refreshToken: string) => {
     const { id, email } = payload as { id: string; email: string };
     const newToken = signAccessToken(
       { id, email },
-      `${accessTokenExpirationTime}s`
+      `${accessTokenExpirationTime}h`
     );
     return { token: newToken };
   } catch (error) {

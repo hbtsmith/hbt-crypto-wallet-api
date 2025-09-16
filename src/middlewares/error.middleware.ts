@@ -35,5 +35,5 @@ export function errorHandler(
   }
 
   // Erro genérico
-  return res.status(500).json({ error: "Erro interno do servidor" });
+  return res.status(500).json({ error: "Erro interno do servidor middleware" });
 }

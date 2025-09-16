@@ -3,7 +3,7 @@
   "info": {
     "title": "Crypto Wallet API",
     "version": "1.0.0",
-    "description": "Documentação da API de portfólio de criptomoedas"
+    "description": "API Doc for Crypto Portfolio Learning APP"
   },
   "servers": [
     {
@@ -15,10 +15,32 @@
       "bearerAuth": []
     }
   ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Auth features"
+    },
+    {
+      "name": "Categories",
+      "description": "Categories operations"
+    },
+    {
+      "name": "Tokens",
+      "description": "Tokens operations"
+    },
+    {
+      "name": "TokenBalance",
+      "description": "Token balance operations"
+    },
+    {
+      "name": "Import",
+      "description": "Import via spreadsheet upload"
+    }
+  ],
   "paths": {
     "/token-balance/balance/{tokenId}/amount": {
       "get": {
-        "summary": "Obter o total de amount do token",
+        "summary": "Get total token amount",
         "tags": ["TokenBalance"],
         "security": [{ "bearerAuth": [] }],
         "parameters": [
@@ -27,12 +49,12 @@
             "in": "path",
             "required": true,
             "schema": { "type": "string", "format": "uuid" },
-            "description": "ID do token"
+            "description": "Token ID"
           }
         ],
         "responses": {
           "200": {
-            "description": "Total de amount do token",
+            "description": "Total token amount",
             "content": {
               "application/json": {
                 "schema": {
@@ -42,13 +64,13 @@
               }
             }
           },
-          "404": { "description": "Token não encontrado" }
+          "404": { "description": "Token Not Found" }
         }
       }
     },
     "/token-balance/balance/{tokenId}/value": {
       "get": {
-        "summary": "Obter o valor total do token",
+        "summary": "Get total token value",
         "tags": ["TokenBalance"],
         "security": [{ "bearerAuth": [] }],
         "parameters": [
@@ -57,12 +79,12 @@
             "in": "path",
             "required": true,
             "schema": { "type": "string", "format": "uuid" },
-            "description": "ID do token"
+            "description": "Token ID"
           }
         ],
         "responses": {
           "200": {
-            "description": "Valor total do token",
+            "description": "Total token value",
             "content": {
               "application/json": {
                 "schema": {
@@ -72,14 +94,14 @@
               }
             }
           },
-          "404": { "description": "Token não encontrado" }
+          "404": { "description": "Token Not Found" }
         }
       }
     },
     "/auth/register": {
       "post": {
-        "summary": "Registrar novo usuário",
-        "tags": ["Autenticação"],
+        "summary": "Create new User",
+        "tags": ["Auth"],
         "requestBody": {
           "required": true,
           "content": {
@@ -92,18 +114,18 @@
         },
         "responses": {
           "201": {
-            "description": "Usuário criado com sucesso"
+            "description": "User created successfully"
           },
           "400": {
-            "description": "Usuário já existe"
+            "description": "User already exists"
           }
         }
       }
     },
     "/auth/login": {
       "post": {
-        "summary": "Login de usuário",
-        "tags": ["Autenticação"],
+        "summary": "User login",
+        "tags": ["Auth"],
         "requestBody": {
           "required": true,
           "content": {
@@ -116,18 +138,18 @@
         },
         "responses": {
           "200": {
-            "description": "Login bem-sucedido, retorna token JWT"
+            "description": "Login successful, returns JWT token"
           },
           "401": {
-            "description": "Credenciais inválidas"
+            "description": "Invalid credentials"
           }
         }
       }
     },
     "/auth/refresh-token": {
       "post": {
-        "tags": ["Autenticação"],
-        "summary": "Gera um novo access token com base no refresh token",
+        "tags": ["Auth"],
+        "summary": "Generate a new access token based on the refresh token",
         "requestBody": {
           "required": true,
           "content": {
@@ -147,7 +169,7 @@
         },
         "responses": {
           "200": {
-            "description": "Tokens gerados com sucesso",
+            "description": "Tokens generated successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -167,14 +189,14 @@
             }
           },
           "401": {
-            "description": "Token inválido ou expirado"
+            "description": "Token invalid or expired"
           }
         }
       }
     },
     "/tokens": {
       "post": {
-        "summary": "Criar um novo token",
+        "summary": "Create a new token",
         "tags": ["Tokens"],
         "requestBody": {
           "required": true,
@@ -188,7 +210,7 @@
         },
         "responses": {
           "201": {
-            "description": "Token criado com sucesso",
+            "description": "Token created successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -198,12 +220,12 @@
             }
           },
           "400": {
-            "description": "Erro de validação nos dados enviados"
+            "description": "Validation error in the submitted data"
           }
         }
       },
       "get": {
-        "summary": "Listar todos os tokens",
+        "summary": "List all tokens",
         "tags": ["Tokens"],
         "parameters": [
           {
@@ -213,7 +235,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filtro por parte do nome do token"
+            "description": "Filter by part of the token name"
           },
           {
             "name": "symbol",
@@ -222,7 +244,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filtro por parte do símbolo do token"
+            "description": "Filter by part of the token symbol"
           },
           {
             "name": "page",
@@ -232,7 +254,7 @@
               "type": "integer",
               "default": 1
             },
-            "description": "Número da página para paginação"
+            "description": "Page number for pagination"
           },
           {
             "name": "limit",
@@ -242,7 +264,7 @@
               "type": "integer",
               "default": 10
             },
-            "description": "Quantidade de itens por página"
+            "description": "Number of items per page"
           },
           {
             "name": "sortBy",
@@ -252,7 +274,7 @@
               "type": "string",
               "default": "name"
             },
-            "description": "Campo de ordenação"
+            "description": "Sorting field"
           },
           {
             "name": "order",
@@ -263,12 +285,12 @@
               "enum": ["asc", "desc"],
               "default": "asc"
             },
-            "description": "Ordem da ordenação: ascendente ou descendente"
+            "description": "Sorting order: ascending or descending"
           }
         ],
         "responses": {
           "200": {
-            "description": "Lista de tokens",
+            "description": "List of tokens",
             "content": {
               "application/json": {
                 "schema": {
@@ -285,7 +307,7 @@
     },
     "/tokens/{id}": {
       "get": {
-        "summary": "Buscar token por ID",
+        "summary": "Get token by ID",
         "tags": ["Tokens"],
         "parameters": [
           {
@@ -300,7 +322,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Token encontrado",
+            "description": "Token found",
             "content": {
               "application/json": {
                 "schema": {
@@ -310,12 +332,12 @@
             }
           },
           "404": {
-            "description": "Token não encontrado"
+            "description": "Token not found"
           }
         }
       },
       "put": {
-        "summary": "Atualizar token",
+        "summary": "Update token",
         "tags": ["Tokens"],
         "parameters": [
           {
@@ -340,7 +362,7 @@
         },
         "responses": {
           "200": {
-            "description": "Token atualizado com sucesso",
+            "description": "Token updated successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -350,12 +372,12 @@
             }
           },
           "404": {
-            "description": "Token não encontrado"
+            "description": "Token not found"
           }
         }
       },
       "delete": {
-        "summary": "Excluir token",
+        "summary": "Delete token",
         "tags": ["Tokens"],
         "parameters": [
           {
@@ -370,18 +392,18 @@
         ],
         "responses": {
           "204": {
-            "description": "Token excluído com sucesso"
+            "description": "Token deleted successfully"
           },
           "404": {
-            "description": "Token não encontrado"
+            "description": "Token not found"
           }
         }
       }
     },
     "/categories": {
       "get": {
-        "summary": "Listar categorias",
-        "tags": ["Categorias"],
+        "summary": "List Categories",
+        "tags": ["Categories"],
         "parameters": [
           {
             "name": "name",
@@ -390,7 +412,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filtro por parte do nome da categoria"
+            "description": "Filter by part of the category name"
           },
           {
             "name": "description",
@@ -399,7 +421,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filtro por parte da descrição da categoria"
+            "description": "Filter by part of the category description"
           },
           {
             "name": "page",
@@ -409,7 +431,7 @@
               "type": "integer",
               "default": 1
             },
-            "description": "Número da página para paginação"
+            "description": "Page number for pagination"
           },
           {
             "name": "limit",
@@ -419,7 +441,7 @@
               "type": "integer",
               "default": 10
             },
-            "description": "Quantidade de itens por página"
+            "description": "Number of items per page"
           },
           {
             "name": "sortBy",
@@ -429,7 +451,7 @@
               "type": "string",
               "default": "name"
             },
-            "description": "Campo de ordenação"
+            "description": "Sorting field"
           },
           {
             "name": "order",
@@ -440,12 +462,12 @@
               "enum": ["asc", "desc"],
               "default": "asc"
             },
-            "description": "Ordem da ordenação: ascendente ou descendente"
+            "description": "Sorting order: ascending or descending"
           }
         ],
         "responses": {
           "200": {
-            "description": "Lista de categorias",
+            "description": "List of Categories",
             "content": {
               "application/json": {
                 "schema": {
@@ -460,8 +482,8 @@
         }
       },
       "post": {
-        "summary": "Criar nova categoria",
-        "tags": ["Categorias"],
+        "summary": "Create new category",
+        "tags": ["Categories"],
         "requestBody": {
           "required": true,
           "content": {
@@ -474,7 +496,7 @@
         },
         "responses": {
           "201": {
-            "description": "Categoria criada com sucesso",
+            "description": "Category created successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -488,8 +510,8 @@
     },
     "/categories/{id}": {
       "get": {
-        "summary": "Buscar categoria por ID",
-        "tags": ["Categorias"],
+        "summary": "Get category by ID",
+        "tags": ["Categories"],
         "parameters": [
           {
             "name": "id",
@@ -503,7 +525,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Categoria encontrada",
+            "description": "Category found",
             "content": {
               "application/json": {
                 "schema": {
@@ -513,13 +535,13 @@
             }
           },
           "404": {
-            "description": "Categoria não encontrada"
+            "description": "Category not found"
           }
         }
       },
       "put": {
-        "summary": "Atualizar categoria",
-        "tags": ["Categorias"],
+        "summary": "Update category",
+        "tags": ["Categories"],
         "parameters": [
           {
             "name": "id",
@@ -543,7 +565,7 @@
         },
         "responses": {
           "200": {
-            "description": "Categoria atualizada com sucesso",
+            "description": "Category updated successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -553,14 +575,14 @@
             }
           },
           "404": {
-            "description": "Categoria não encontrada"
+            "description": "Category not found"
           }
         }
       }
     },
     "/token-balance": {
       "get": {
-        "summary": "Listar balanços de tokens do usuário autenticado",
+        "summary": "List token balances for the authenticated user",
         "tags": ["TokenBalance"],
         "parameters": [
           {
@@ -568,28 +590,28 @@
             "in": "query",
             "required": true,
             "schema": { "type": "string", "format": "uuid" },
-            "description": "Filtrar por ID do token"
+            "description": "Filter by token ID"
           },
           {
             "name": "page",
             "in": "query",
             "required": false,
             "schema": { "type": "integer", "default": 1 },
-            "description": "Número da página para paginação"
+            "description": "Page number for pagination"
           },
           {
             "name": "limit",
             "in": "query",
             "required": false,
             "schema": { "type": "integer", "default": 10 },
-            "description": "Limite de itens por página"
+            "description": "Limit of items per page"
           },
           {
             "name": "sortBy",
             "in": "query",
             "required": false,
             "schema": { "type": "string", "default": "operationAt" },
-            "description": "Campo de ordenação"
+            "description": "Sort by field"
           },
           {
             "name": "order",
@@ -600,12 +622,12 @@
               "enum": ["asc", "desc"],
               "default": "desc"
             },
-            "description": "Ordem da ordenação"
+            "description": "Sort order"
           }
         ],
         "responses": {
           "200": {
-            "description": "Lista de registros de balanço de tokens",
+            "description": "List of token balance records",
             "content": {
               "application/json": {
                 "schema": {
@@ -619,7 +641,7 @@
         "security": [{ "bearerAuth": [] }]
       },
       "post": {
-        "summary": "Registrar movimentação de token para usuário autenticado",
+        "summary": "Register token movement for authenticated user",
         "tags": ["TokenBalance"],
         "requestBody": {
           "required": true,
@@ -631,7 +653,7 @@
         },
         "responses": {
           "201": {
-            "description": "Registro de balanço criado com sucesso",
+            "description": "Token balance record created successfully",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/TokenBalance" }
@@ -639,7 +661,7 @@
             }
           },
           "400": {
-            "description": "Erro de validação"
+            "description": "Validation error"
           }
         },
         "security": [{ "bearerAuth": [] }]
@@ -648,7 +670,7 @@
     "/token-balance/{id}": {
       "get": {
         "tags": ["TokenBalance"],
-        "summary": "Buscar TokenBalance por ID",
+        "summary": "Get TokenBalance by ID",
         "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
@@ -660,7 +682,7 @@
         ],
         "responses": {
           "200": {
-            "description": "TokenBalance encontrado",
+            "description": "TokenBalance found",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/TokenBalance" }
@@ -668,7 +690,7 @@
             }
           },
           "404": {
-            "description": "TokenBalance não encontrado"
+            "description": "TokenBalance not found"
           }
         }
       },
@@ -724,6 +746,114 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/import/categories": {
+      "post": {
+        "tags": ["Import"],
+        "summary": "Import data via Excel spreadsheet",
+        "description": "Uploads an Excel spreadsheet to import Categories.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Excel File (.xlsx) to be uploaded"
+                  }
+                },
+                "required": ["file"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File received and processed successfully."
+          },
+          "400": {
+            "description": "Error processing file."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/import/tokens": {
+      "post": {
+        "tags": ["Import"],
+        "summary": "Import data via Excel spreadsheet",
+        "description": "Uploads an Excel spreadsheet to import Tokens.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Excel File (.xlsx) to be uploaded"
+                  }
+                },
+                "required": ["file"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File received and processed successfully."
+          },
+          "400": {
+            "description": "Error processing file."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/import/token-balances": {
+      "post": {
+        "tags": ["Import"],
+        "summary": "Import data via Excel spreadsheet",
+        "description": "Uploads an Excel spreadsheet to import Balances.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Excel File (.xlsx) to be uploaded"
+                  }
+                },
+                "required": ["file"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File received and processed successfully."
+          },
+          "400": {
+            "description": "Error processing file."
+          },
+          "500": {
+            "description": "Internal server error."
           }
         }
       }

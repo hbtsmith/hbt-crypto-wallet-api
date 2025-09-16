@@ -7,7 +7,9 @@ import categoryRoutes from "./routes/category.routes";
 import tokenRoutes from "./routes/token.routes";
 import authRoutes from "./routes/auth.routes";
 import tokenBalance from "./routes/tokenBalance.routes";
+import importRouter from "./routes/import.routes";
 import { errorHandler } from "./middlewares/error.middleware";
+import fileUpload from "express-fileupload";
 
 dotenv.config();
 
@@ -15,6 +17,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(fileUpload());
 
 // Rota da documentação Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -25,6 +28,7 @@ app.use("/tokens", tokenRoutes);
 app.use("/auth", authRoutes);
 app.use("/token-balance", tokenBalance);
 
+app.use("/import", importRouter);
 app.use(errorHandler);
 
 export default app;
