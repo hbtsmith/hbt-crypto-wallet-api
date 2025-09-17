@@ -1,5 +1,5 @@
 import { prisma } from "../../src/config/prisma";
-import { generateToken } from "../../src/utils/jwt";
+import { signAccessToken } from "../../src/utils/jwt";
 import bcrypt from "bcryptjs";
 
 export async function generateTestToken() {
@@ -13,6 +13,6 @@ export async function generateTestToken() {
     },
   });
 
-  const token = generateToken({ id: user.id });
+  const token = signAccessToken({ id: user.id });
   return token;
 }

@@ -22,17 +22,13 @@ export async function importCategoriesService(
   file: UploadedFile,
   userId: string
 ) {
-  const records = parseCsvFile(file) as { name: string; description?: string }[];
   
+  const records = parseCsvFile(file) as { name: string; description?: string }[];
   const importedCategories = [];
   
   for (const record of records) {
     if (!record.name || record.name.trim() === '') {
-      throw new BadRequestError(MESSAGES.VALIDATION.REQUIRED_FIELD("name"));
-    }
-
-    if (!record.description || record.description.trim() === '') {
-      throw new BadRequestError(MESSAGES.VALIDATION.REQUIRED_FIELD("description"));
+      continue; // Pula registros sem nome
     }
     
     // Verifica se já existe uma categoria com o mesmo nome para o usuário
@@ -45,24 +41,24 @@ export async function importCategoriesService(
 
     let category;
     if (existingCategory) {
-      // Atualiza a categoria existente
+      // Update category
+      const data = {
+        name: record.name.trim(),
+        description: record.description ?? null,
+      }
       category = await prisma.category.update({
         where: { id: existingCategory.id },
-        data: {
-          description: record.description || null,
-        },
+        data,
       });
     } else {
-      // Cria nova categoria
-      category = await prisma.category.create({
-        data: {
-          name: record.name.trim(),
-          description: record.description || null,
-          userId,
-        },
-      });
+      // Create new category
+      const data = {
+        name: record.name.trim(),
+        description: record.description ?? null,
+        userId,
+      }
+      category = await prisma.category.create({ data });
     }
-    
     importedCategories.push(category);
   }
 
@@ -84,16 +80,12 @@ export async function importTokensService(file: UploadedFile, userId: string) {
   
   for (const record of records) {
     
-    if (!record.name || record.name.trim() === '') {
-      throw new BadRequestError(MESSAGES.VALIDATION.REQUIRED_FIELD("name"));
-    }
-    
-    if (!record.symbol || record.symbol.trim() === '') {
-      throw new BadRequestError(MESSAGES.VALIDATION.REQUIRED_FIELD("symbol"));
-    }
-    
-    if (!record.categoryId || record.categoryId.trim() === '') {
-      throw new BadRequestError(MESSAGES.VALIDATION.REQUIRED_FIELD("categoryId"));
+    if ( 
+      (!record.name || record.name.trim() === '') ||
+      (!record.symbol || record.symbol.trim() === '') ||
+      (!record.categoryId || record.categoryId.trim() === '')
+    ){
+      continue;
     }
 
     const existingCategory = await prisma.category.findFirst({
@@ -163,31 +155,17 @@ export async function importTokenBalancesService(file: UploadedFile, userId: str
   await prisma.$transaction(async (tx) => {
 
     for (const record of records) {
-      
-      if (!record.tokenId || record.tokenId.trim() === '') {
-        throw new BadRequestError(MESSAGES.VALIDATION.REQUIRED_FIELD("tokenId"));
-      }
-      
-      if (!record.price || record.price < 0) {
-        throw new BadRequestError(MESSAGES.VALIDATION.REQUIRED_FIELD("price"));
-      }
-      
-      if (!record.amount || record.amount < 0) {
-        throw new BadRequestError(MESSAGES.VALIDATION.REQUIRED_FIELD("amount"));
-      }
-      
-      if (!record.operationAt || record.operationAt.trim() === '') {
-        throw new BadRequestError(MESSAGES.VALIDATION.REQUIRED_FIELD("operationAt"));
-      }
-  
-      if (!record.operationType ||
-      typeof record.operationType !== "string" ||
-      record.operationType.trim() === "" ||
-      (record.operationType !== operationTypeEnum.SELL &&
-        record.operationType !== operationTypeEnum.BUY)
+
+      if ( (!record.tokenId || record.tokenId.trim() === '') 
+      || (!record.price || record.price < 0)
+      || (!record.amount || record.amount < 0)
+      || (!record.operationAt || record.operationAt.trim() === '')
+      || (!record.operationType || typeof record.operationType !== "string" || record.operationType.trim() === "" )
+      || (record.operationType !== operationTypeEnum.SELL && record.operationType !== operationTypeEnum.BUY)
       ){
-        throw new BadRequestError(MESSAGES.VALIDATION.REQUIRED_FIELD("operationType"));
+        continue
       }
+    
   
       const existingToken = await tx.token.findFirst({
         where: {
@@ -200,8 +178,14 @@ export async function importTokenBalancesService(file: UploadedFile, userId: str
         throw new BadRequestError(MESSAGES.TOKEN.NOT_FOUND);
       }
   
-      const totalAmount = await getTotalAmountBalanceService(userId, record.tokenId);
-  
+      
+      const tokenBalanceSum = await tx.tokenBalance.aggregate({
+        where: { tokenId: record.tokenId },
+        _sum: { amount: true },
+      });
+      const totalAmount = tokenBalanceSum._sum.amount ?? 0;
+
+
       if (record.operationType === operationTypeEnum.SELL) {
         if (totalAmount && totalAmount.lessThan(record.amount)) {
           throw new BadRequestError(MESSAGES.TOKEN_BALANCE.INSUFFICIENT_FUNDS_TO_SELL);

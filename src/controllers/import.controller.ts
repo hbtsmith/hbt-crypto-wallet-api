@@ -14,7 +14,7 @@ export const importCategories = async (
   try {
     // O arquivo já foi validado pelo middleware
     const file = req.validatedFile!;
-
+    
     const result = await importCategoriesService(file, req.user.id);
     
     return res.status(200).json({ 

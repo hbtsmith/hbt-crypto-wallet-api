@@ -13,6 +13,7 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/crypto
       - JWT_SECRET=eyJkYXRhYmFzZVVhbt6InBsmith3RncmVzOi8vcG9zdGdy
+      - TZ=America/Sao_Paulo
     depends_on:
       - db
 
@@ -26,6 +27,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: crypto
+      TZ: America/Sao_Paulo
+      PGTZ: America/Sao_Paulo
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
