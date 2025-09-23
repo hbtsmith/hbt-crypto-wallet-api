@@ -20,6 +20,24 @@ export const MESSAGES = {
     INSUFFICIENT_FUNDS_TO_SELL:
       "Insufficient balance to perform the Sell operation.",
   },
+  TOKEN_ALERT: {
+    CREATED_SUCCESS: "Token alert created successfully!",
+    CREATION_FAILED: "Error creating token alert.",
+    LIST_FAILED: "Error listing token alerts.",
+    NOT_FOUND: "Token alert not found.",
+    INVALID_ID: "Invalid token alert ID.",
+    ALREADY_EXISTS: "Token alert already exists for this symbol and price.",
+    UPDATED_SUCCESS: "Token alert updated successfully!",
+    UPDATE_FAILED: "Error updating token alert.",
+    DELETED_SUCCESS: "Token alert deleted successfully!",
+    DELETE_FAILED: "Error deleting token alert.",
+    ACTIVATED_SUCCESS: "Token alert activated successfully!",
+    DEACTIVATED_SUCCESS: "Token alert deactivated successfully!",
+    INVALID_DIRECTION: "Invalid direction. Must be CROSS_UP or CROSS_DOWN.",
+    INVALID_PRICE: "Price must be a positive number.",
+    ALREADY_ACTIVE: "Token alert is already active.",
+    ALREADY_INACTIVE: "Token alert is already inactive.",
+  },
   USER: {
     ALREADY_REGISTERED: "User already registered.",
     REFRESH_TOKEN_REQUIRED: "Refresh token is required.",
@@ -38,10 +56,13 @@ export const MESSAGES = {
       `The field ${field} is required and must be a valid decimal number.`,
     REQUIRED_UUID_FIELD: (field: string) =>
       `The field ${field} is required and must be a valid UUID.`,
+    REQUIRED_BOOLEAN_FIELD: (field: string) =>
+      `The field ${field} must be a boolean value.`,
   },
   SYSTEM: {
     ERROR: "System error.",
     NOT_FOUND: "Resource not found.",
+    INTERNAL_SERVER_ERROR: "Internal server error.",
   },
   IMPORT: {
     INVALID_FILE_TYPE:

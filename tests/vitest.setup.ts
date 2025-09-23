@@ -14,6 +14,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
+  await prisma.tokenAlert.deleteMany({});
   await prisma.tokenBalance.deleteMany({});
   await prisma.token.deleteMany({});
   await prisma.category.deleteMany({});

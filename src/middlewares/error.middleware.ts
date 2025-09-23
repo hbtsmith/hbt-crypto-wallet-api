@@ -6,6 +6,7 @@ import {
   UnauthorizedError,
   ConflictError,
 } from "../helpers/api-errors";
+import { MESSAGES } from "../messages";
 
 import { Request, Response, NextFunction } from "express";
 
@@ -35,5 +36,5 @@ export function errorHandler(
   }
 
   // Erro genérico
-  return res.status(500).json({ error: "Erro interno do servidor middleware" });
+  return res.status(500).json({ error: MESSAGES.SYSTEM.INTERNAL_SERVER_ERROR });
 }

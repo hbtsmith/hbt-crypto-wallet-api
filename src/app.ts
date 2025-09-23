@@ -8,6 +8,7 @@ import tokenRoutes from "./routes/token.routes";
 import authRoutes from "./routes/auth.routes";
 import tokenBalance from "./routes/tokenBalance.routes";
 import importRouter from "./routes/import.routes";
+import tokenAlertRoutes from "./routes/tokenAlert.routes";
 import { errorHandler } from "./middlewares/error.middleware";
 import fileUpload from "express-fileupload";
 
@@ -27,6 +28,7 @@ app.use("/categories", categoryRoutes);
 app.use("/tokens", tokenRoutes);
 app.use("/auth", authRoutes);
 app.use("/token-balance", tokenBalance);
+app.use("/token-alerts", tokenAlertRoutes);
 
 app.use("/import", importRouter);
 app.use(errorHandler);

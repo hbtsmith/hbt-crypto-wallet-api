@@ -16,7 +16,10 @@
     "test:clear": "clear;clear;vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
-    "migrate:deploy:test": "dotenv -e .env.test -- prisma migrate deploy"
+    "migrate:deploy:test": "dotenv -e .env.test -- prisma migrate deploy",
+    "crypto:test": "tsx src/services/cryptoPrice/examples/mock-test.ts",
+    "crypto:test:real": "tsx src/services/cryptoPrice/examples/simple-test.ts",
+    "crypto:test:debug": "tsx src/services/cryptoPrice/examples/debug-test.ts"
   },
   "dependencies": {
     "@prisma/client": "6.14.0",

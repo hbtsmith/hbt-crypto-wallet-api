@@ -35,6 +35,10 @@
     {
       "name": "Import",
       "description": "Import via spreadsheet upload"
+    },
+    {
+      "name": "TokenAlerts",
+      "description": "Token alerts operations"
     }
   ],
   "paths": {
@@ -857,6 +861,302 @@
           }
         }
       }
+    },
+    "/token-alerts": {
+      "post": {
+        "summary": "Create a new token alert",
+        "tags": ["TokenAlerts"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenAlertInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Token alert created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenAlert"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "summary": "List token alerts",
+        "tags": ["TokenAlerts"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 10 }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "default": "createdAt" }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "enum": ["asc", "desc"], "default": "desc" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token alerts retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "limit": { "type": "integer" },
+                    "totalPages": { "type": "integer" },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/TokenAlert"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/token-alerts/{id}": {
+      "get": {
+        "summary": "Get token alert by ID",
+        "tags": ["TokenAlerts"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token alert retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenAlert"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Token alert not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update token alert",
+        "tags": ["TokenAlerts"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenAlertUpdateInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token alert updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenAlert"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Token alert not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete token alert",
+        "tags": ["TokenAlerts"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Token alert deleted successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Token alert not found"
+          }
+        }
+      }
+    },
+    "/token-alerts/{id}/activate": {
+      "patch": {
+        "summary": "Activate token alert",
+        "tags": ["TokenAlerts"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token alert activated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "data": {
+                      "$ref": "#/components/schemas/TokenAlert"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Token alert not found"
+          }
+        }
+      }
+    },
+    "/token-alerts/{id}/deactivate": {
+      "patch": {
+        "summary": "Deactivate token alert",
+        "tags": ["TokenAlerts"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token alert deactivated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "data": {
+                      "$ref": "#/components/schemas/TokenAlert"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Token alert not found"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -978,6 +1278,42 @@
           "operationType": { "type": "string", "enum": ["BUY", "SELL"] },
           "operationAt": { "type": "string", "format": "date-time" },
           "notes": { "type": "string", "nullable": true }
+        }
+      },
+      "TokenAlert": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "symbol": { "type": "string" },
+          "price": { "type": "number", "format": "decimal" },
+          "direction": { "type": "string", "enum": ["CROSS_UP", "CROSS_DOWN"] },
+          "userId": { "type": "string", "format": "uuid" },
+          "lastNotificationDate": { "type": "string", "format": "date-time", "nullable": true },
+          "active": { "type": "boolean" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "TokenAlertInput": {
+        "type": "object",
+        "required": [
+          "symbol",
+          "price",
+          "direction"
+        ],
+        "properties": {
+          "symbol": { "type": "string" },
+          "price": { "type": "number", "format": "decimal" },
+          "direction": { "type": "string", "enum": ["CROSS_UP", "CROSS_DOWN"] }
+        }
+      },
+      "TokenAlertUpdateInput": {
+        "type": "object",
+        "properties": {
+          "symbol": { "type": "string" },
+          "price": { "type": "number", "format": "decimal" },
+          "direction": { "type": "string", "enum": ["CROSS_UP", "CROSS_DOWN"] },
+          "active": { "type": "boolean" }
         }
       }
     }
