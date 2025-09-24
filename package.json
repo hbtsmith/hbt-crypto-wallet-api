@@ -19,7 +19,6 @@
     "migrate:deploy:test": "dotenv -e .env.test -- prisma migrate deploy",
     "crypto:test": "tsx src/services/cryptoPrice/examples/mock-test.ts",
     "crypto:test:real": "tsx src/services/cryptoPrice/examples/simple-test.ts",
-    "crypto:test:debug": "tsx src/services/cryptoPrice/examples/debug-test.ts",
     "alert:test": "tsx src/services/alertScheduler/examples/test-alert-system.ts",
     "lint": "echo 'Linting completed'",
     "format": "echo 'Formatting completed'",
