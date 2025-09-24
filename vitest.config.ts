@@ -13,4 +13,7 @@ export default defineConfig({
       exclude: ["tests", "src/docs", "src/config/swagger.ts"],
     },
   },
+  esbuild: {
+    target: "node18"
+  }
 });
