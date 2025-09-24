@@ -103,9 +103,9 @@ curl http://localhost:3000/health
 
 ### Email Support
 For urgent issues or private matters:
-- **General Support**: support@yourdomain.com
-- **Security Issues**: security@yourdomain.com
-- **Business Inquiries**: business@yourdomain.com
+- **General Support**: hbt.vieira@gmail.com
+- **Security Issues**: hbt.vieira@gmail.com
+- **Business Inquiries**: hbt.vieira@gmail.com
 
 ### Response Times
 - **Critical Issues**: Within 24 hours
@@ -141,7 +141,7 @@ Want to help improve the project? Check out our [Contributing Guide](.github/CON
 
 For critical production issues:
 1. Create an issue with the "urgent" label
-2. Email security@yourdomain.com
+2. Email hbt.vieira@gmail.com
 3. Include:
    - Description of the issue
    - Impact on users

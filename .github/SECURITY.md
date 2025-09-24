@@ -14,7 +14,7 @@ We release patches for security vulnerabilities in the following versions:
 If you discover a security vulnerability, please follow these steps:
 
 1. **Do not** open a public issue
-2. Email us at: security@yourdomain.com
+2. Email us at: hbt.vieira@gmail.com
 3. Include the following information:
    - Description of the vulnerability
    - Steps to reproduce
@@ -53,4 +53,4 @@ If you discover a security vulnerability, please follow these steps:
 
 ## Contact
 
-For security-related questions, please contact: security@yourdomain.com
+For security-related questions, please contact: hbt.vieira@gmail.com
