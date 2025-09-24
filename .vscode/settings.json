@@ -1,16 +1,25 @@
 {
+  "typescript.preferences.importModuleSpecifier": "relative",
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[javascript]": {
-    "editor.formatOnSave": true
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
   },
-  "[typescript]": {
-    "editor.formatOnSave": true
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.git": true,
+    "**/.DS_Store": true
   },
-  "prettier.semi": true,
-  "prettier.singleQuote": true,
-  "prettier.trailingComma": "es5",
-  "prettier.tabWidth": 2,
-  "prettier.useTabs": false,
-  "postman.settings.dotenv-detection-notification-visibility": false
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/yarn.lock": true
+  },
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+  "emmet.includeLanguages": {
+    "typescript": "html"
+  },
+  "files.associations": {
+    "*.env*": "dotenv"
+  }
 }

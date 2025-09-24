@@ -8,6 +8,7 @@ import {
 } from './types';
 import { CryptoPriceProviderFactory } from './CryptoPriceProviderFactory';
 import { DEFAULT_CRYPTO_PRICE_CONFIG, CRYPTO_PRICE_ERRORS } from './config';
+import { MESSAGES } from '../../messages';
 
 /**
  * Serviço principal para consulta de preços de cripto
@@ -201,7 +202,7 @@ export class CryptoPriceService {
     }
 
     if (request.symbols.length > 100) {
-      throw new Error('Máximo de 100 símbolos por requisição');
+      throw new Error(MESSAGES.CRYPTO_PRICE.MAX_SYMBOLS_EXCEEDED);
     }
 
     // Valida se os símbolos são válidos (apenas letras e números)
@@ -210,7 +211,7 @@ export class CryptoPriceService {
     );
 
     if (invalidSymbols.length > 0) {
-      throw new Error(`Símbolos inválidos: ${invalidSymbols.join(', ')}`);
+      throw new Error(`${MESSAGES.CRYPTO_PRICE.INVALID_SYMBOLS}: ${invalidSymbols.join(', ')}`);
     }
   }
 }

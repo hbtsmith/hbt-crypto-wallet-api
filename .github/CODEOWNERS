@@ -1,0 +1,21 @@
+# Global code owners
+* @hbtsmith
+
+# API and core functionality
+/src/ @hbtsmith
+/package.json @hbtsmith
+/tsconfig.json @hbtsmith
+
+# Database and migrations
+/prisma/ @hbtsmith
+
+# Docker configuration
+/docker-compose*.yml @hbtsmith
+/Dockerfile* @hbtsmith
+
+# CI/CD
+/.github/ @hbtsmith
+
+# Documentation
+/README.md @hbtsmith
+/LICENSE @hbtsmith

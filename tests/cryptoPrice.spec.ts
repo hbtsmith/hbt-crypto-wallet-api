@@ -142,12 +142,12 @@ describe('CryptoPriceService', () => {
     const manySymbols = Array.from({ length: 150 }, (_, i) => `SYMBOL${i}`);
     await expect(
       cryptoService.getPrices({ symbols: manySymbols, currency: 'USD' })
-    ).rejects.toThrow('Máximo de 100 símbolos por requisição');
+    ).rejects.toThrow('Maximum of 100 symbols per request');
 
     // Teste com símbolos inválidos
     await expect(
       cryptoService.getPrices({ symbols: ['BTC-USD', 'ETH@'], currency: 'USD' })
-    ).rejects.toThrow('Símbolos inválidos');
+    ).rejects.toThrow('Invalid symbols');
   });
 
   it('deve lidar com erros de API', async () => {

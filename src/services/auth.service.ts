@@ -104,3 +104,21 @@ export const refreshTokenService = async (refreshToken: string) => {
     throw new UnauthorizedError(String(error));
   }
 };
+
+export const updateDeviceTokenService = async (
+  userId: string,
+  deviceToken: string
+) => {
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: { deviceToken },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      deviceToken: true,
+    },
+  });
+
+  return user;
+};

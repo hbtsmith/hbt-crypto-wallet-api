@@ -3,8 +3,9 @@ import {
   registerService,
   loginService,
   refreshTokenService,
+  updateDeviceTokenService,
 } from "../services/auth.service";
-import { registerSchema, loginSchema } from "../validators/auth.validator";
+import { registerSchema, loginSchema, updateDeviceTokenSchema } from "../validators/auth.validator";
 import { MESSAGES } from "../messages";
 
 export async function register(
@@ -16,7 +17,7 @@ export async function register(
 
   if (!result.success) {
     return res.status(400).json({
-      error: "Dados inválidos",
+      error: MESSAGES.AUTH.INVALID_DATA,
       issues: result.error.issues, // Mostra erros amigáveis
     });
   }
@@ -68,6 +69,36 @@ export const refreshToken = async (
   try {
     const newTokens = await refreshTokenService(refreshToken);
     return res.status(200).json(newTokens);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const updateDeviceToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user!.id;
+  
+  const result = updateDeviceTokenSchema.safeParse(req.body);
+  if (!result.success) {
+    return res.status(400).json({
+      error: MESSAGES.AUTH.INVALID_DATA,
+      issues: result.error.issues,
+    });
+  }
+
+  const { deviceToken } = result.data;
+
+  try {
+    const user = await updateDeviceTokenService(userId, deviceToken);
+
+    return res.status(200).json({
+      success: true,
+      message: MESSAGES.USER.DEVICE_TOKEN_UPDATED,
+      data: user,
+    });
   } catch (error) {
     return next(error);
   }

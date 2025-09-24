@@ -1,0 +1,19 @@
+{
+  "recommendations": [
+    "ms-vscode.vscode-typescript-next",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-json",
+    "prisma.prisma",
+    "ms-vscode.vscode-node-azure-pack",
+    "ms-vscode.vscode-docker",
+    "redhat.vscode-yaml",
+    "ms-vscode-remote.remote-containers",
+    "ms-vscode.vscode-github-actions",
+    "ms-vscode.vscode-github-issue-notebooks",
+    "ms-vscode.vscode-markdown",
+    "ms-vscode.vscode-typescript-next",
+    "ms-vscode.vscode-eslint",
+    "ms-vscode.vscode-prettier"
+  ]
+}

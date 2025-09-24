@@ -5,6 +5,7 @@ import {
   CryptoPriceProvider, 
   CryptoPriceProviderConfig 
 } from '../types';
+import { MESSAGES } from '../../../messages';
 
 /**
  * Interface para o cache de mapeamento de símbolos
@@ -164,7 +165,7 @@ export class CoinGeckoProvider implements CryptoPriceProvider {
       await this.refreshSymbolCache();
       return this.symbolCache!.data;
     } catch (error) {
-      console.warn('Falha ao buscar mapeamento de símbolos da API, usando cache local:', error);
+      console.warn('Failed to fetch symbol mapping from API, using local cache:', error);
       
       // Se falhar, usa mapeamento básico como fallback
       return this.getBasicSymbolToIdMap();
@@ -207,7 +208,7 @@ export class CoinGeckoProvider implements CryptoPriceProvider {
       const coins: Array<{ id: string; symbol: string; name: string }> = await response.json();
       
       if (!Array.isArray(coins) || coins.length === 0) {
-        throw new Error('Resposta inválida da API do CoinGecko');
+        throw new Error(MESSAGES.CRYPTO_PRICE.INVALID_API_RESPONSE);
       }
 
       // Cria o mapeamento de símbolo para ID
@@ -251,7 +252,7 @@ export class CoinGeckoProvider implements CryptoPriceProvider {
       // console.log(`Cache de símbolos atualizado com ${Object.keys(symbolToIdMap).length} mapeamentos`);
 
     } catch (error) {
-      throw new Error(`Erro ao atualizar cache de símbolos: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
+      throw new Error(`${MESSAGES.CRYPTO_PRICE.SYMBOL_CACHE_ERROR}: ${error instanceof Error ? error.message : MESSAGES.CRYPTO_PRICE.UNKNOWN_ERROR}`);
     }
   }
 

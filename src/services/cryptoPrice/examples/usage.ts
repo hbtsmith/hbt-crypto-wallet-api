@@ -89,10 +89,10 @@ export async function customConfigExample() {
     });
     
     const prices = await cryptoService.getMultiplePrices(['BTC', 'ETH'], 'BRL');
-    console.log('Preços em BRL:', prices);
+    console.log('Prices in BRL:', prices);
     
   } catch (error) {
-    console.error('Erro:', error);
+    console.error('Error:', error);
   }
 }
 
@@ -105,20 +105,20 @@ export async function providerMonitoringExample() {
     
     // Lista providers disponíveis
     const availableProviders = cryptoService.getAvailableProviders();
-    console.log('Providers disponíveis:', availableProviders);
+    console.log('Available providers:', availableProviders);
     
     // Verifica provider atual
     const currentProvider = cryptoService.getCurrentProvider();
-    console.log('Provider atual:', currentProvider);
+    console.log('Current provider:', currentProvider);
     
     // Verifica se um provider específico está disponível
     const isCoinGeckoAvailable = await cryptoService.isProviderAvailable(
       CryptoPriceProviderType.COINGECKO
     );
-    console.log('CoinGecko disponível:', isCoinGeckoAvailable);
+    console.log('CoinGecko available:', isCoinGeckoAvailable);
     
   } catch (error) {
-    console.error('Erro:', error);
+    console.error('Error:', error);
   }
 }
 
@@ -136,7 +136,7 @@ export async function errorHandlingExample() {
         currency: 'USD'
       });
     } catch (error) {
-      console.log('Erro esperado capturado:', error instanceof Error ? error.message : String(error));
+      console.log('Expected error captured:', error instanceof Error ? error.message : String(error));
     }
     
     // Tenta obter preços de muitos símbolos
@@ -147,10 +147,10 @@ export async function errorHandlingExample() {
         currency: 'USD'
       });
     } catch (error) {
-      console.log('Erro de limite capturado:', error instanceof Error ? error.message : String(error));
+      console.log('Limit error captured:', error instanceof Error ? error.message : String(error));
     }
     
   } catch (error) {
-    console.error('Erro geral:', error);
+    console.error('General error:', error);
   }
 }

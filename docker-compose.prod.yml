@@ -9,8 +9,18 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - JWT_SECRET=${JWT_SECRET}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+      - COINGECKO_API_KEY=${COINGECKO_API_KEY}
+      - COINMARKETCAP_API_KEY=${COINMARKETCAP_API_KEY}
+      - FREECRYPTOAPI_KEY=${FREECRYPTOAPI_KEY}
     depends_on:
       - db
+      - redis
 
   db:
     image: postgres:15
@@ -25,5 +35,16 @@ services:
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
 
+  redis:
+    image: redis:7-alpine
+    container_name: hbt-redis-prod
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_prod:/data
+    command: redis-server --appendonly yes
+
 volumes:
   postgres_data_prod:
+  redis_data_prod:

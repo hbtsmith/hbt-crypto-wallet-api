@@ -9,8 +9,10 @@ import authRoutes from "./routes/auth.routes";
 import tokenBalance from "./routes/tokenBalance.routes";
 import importRouter from "./routes/import.routes";
 import tokenAlertRoutes from "./routes/tokenAlert.routes";
+import internalRoutes from "./routes/internal.routes";
 import { errorHandler } from "./middlewares/error.middleware";
 import fileUpload from "express-fileupload";
+import { initializeBullBoard } from "./services/alertScheduler/bullBoard";
 
 dotenv.config();
 
@@ -29,8 +31,18 @@ app.use("/tokens", tokenRoutes);
 app.use("/auth", authRoutes);
 app.use("/token-balance", tokenBalance);
 app.use("/token-alerts", tokenAlertRoutes);
+app.use("/internal", internalRoutes);
 
 app.use("/import", importRouter);
+
+// Inicializa o Bull Board para monitoramento de filas
+initializeBullBoard().then((bullBoardAdapter) => {
+  app.use('/admin/queues', bullBoardAdapter.getRouter());
+  console.log('🎯 Bull Board available at /admin/queues');
+}).catch((error) => {
+  console.error('❌ Failed to initialize Bull Board:', error);
+});
+
 app.use(errorHandler);
 
 export default app;
