@@ -1112,7 +1112,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^24.3.0":
+"@types/node@npm:*":
   version: 24.3.0
   resolution: "@types/node@npm:24.3.0"
   dependencies:
@@ -1121,7 +1121,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:>=13.7.0":
+"@types/node@npm:>=13.7.0, @types/node@npm:^24.5.2":
   version: 24.5.2
   resolution: "@types/node@npm:24.5.2"
   dependencies:
@@ -2913,7 +2913,7 @@ __metadata:
     "@types/express-fileupload": "npm:^1.5.1"
     "@types/jsonwebtoken": "npm:^9.0.10"
     "@types/multer": "npm:^2.0.0"
-    "@types/node": "npm:^24.3.0"
+    "@types/node": "npm:^24.5.2"
     "@types/swagger-ui-express": "npm:^4.1.8"
     "@vitest/ui": "npm:^3.2.4"
     bcryptjs: "npm:^3.0.2"
