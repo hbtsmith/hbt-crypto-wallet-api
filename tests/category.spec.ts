@@ -14,7 +14,12 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  await prisma.tokenAlert.deleteMany();
+  await prisma.tokenBalance.deleteMany();
+  await prisma.token.deleteMany();
   await prisma.category.deleteMany();
+  await prisma.refreshToken.deleteMany();
+  await prisma.user.deleteMany();
 });
 
 describe("Category", () => {

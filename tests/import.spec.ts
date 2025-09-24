@@ -24,6 +24,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   // Limpar dados de teste
+  await prisma.tokenAlert.deleteMany();
   await prisma.tokenBalance.deleteMany();
   await prisma.token.deleteMany();
   await prisma.category.deleteMany();
