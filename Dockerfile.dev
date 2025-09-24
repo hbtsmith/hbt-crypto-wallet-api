@@ -1,5 +1,5 @@
 # Usa imagem base com Node
-FROM node:20-bullseye
+FROM node:24-bullseye
 
 # Habilita o Corepack (gerenciador de Yarn/Pnpm incluído no Node.js)
 RUN corepack enable
