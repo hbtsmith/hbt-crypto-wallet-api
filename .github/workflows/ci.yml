@@ -57,7 +57,7 @@ jobs:
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/crypto_test
 
     - name: Run tests
-      run: chmod +x tests/run.sh && ./tests/run.sh
+      run: yarn vitest run --environment=node --globals
       env:
         DATABASE_URL: postgresql://postgres:postgres@localhost:5432/crypto_test
         REDIS_HOST: localhost

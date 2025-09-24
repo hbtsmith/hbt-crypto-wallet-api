@@ -54,6 +54,7 @@ afterAll(async () => {
   await prisma.tokenBalance.deleteMany();
   await prisma.token.deleteMany();
   await prisma.category.deleteMany();
+  await prisma.refreshToken.deleteMany();
   await prisma.user.deleteMany();
 });
 

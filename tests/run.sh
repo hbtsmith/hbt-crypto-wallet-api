@@ -16,7 +16,7 @@ for file in $TEST_FILES; do
     echo "==============================="
     echo -e "Rodando teste: ${BLUE}$file${NC}"
     echo "==============================="
-    yarn test $file
+    yarn vitest run $file --environment=node --globals
     END=$(date +%s)
     echo -e "${RED}########### Duração: $((END - START)) segundos - Teste: $file${NC}"
     CODE=$?
