@@ -1571,9 +1571,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bullmq@npm:^5.58.7":
-  version: 5.58.7
-  resolution: "bullmq@npm:5.58.7"
+"bullmq@npm:^5.58.9":
+  version: 5.58.9
+  resolution: "bullmq@npm:5.58.9"
   dependencies:
     cron-parser: "npm:^4.9.0"
     ioredis: "npm:^5.4.1"
@@ -1582,7 +1582,7 @@ __metadata:
     semver: "npm:^7.5.4"
     tslib: "npm:^2.0.0"
     uuid: "npm:^11.1.0"
-  checksum: 10c0/8e63f65e7a5a7c4bf43641f931c6a619f8fb12f2ff810bff4c098fe09a4a6f5377207c207129f26dd6f7973f4a8898bbc94573688c595607d84bd3536106587f
+  checksum: 10c0/0d86a01c79133e0a6d262ced200ac47279496db9d19149c61cc1346843ab79662c85ba863bbfbf803edd5c829d7d62f93a96ab4d85c4419df1c72a328cb682f2
   languageName: node
   linkType: hard
 
@@ -2917,7 +2917,7 @@ __metadata:
     "@types/swagger-ui-express": "npm:^4.1.8"
     "@vitest/ui": "npm:^3.2.4"
     bcryptjs: "npm:^3.0.2"
-    bullmq: "npm:^5.58.7"
+    bullmq: "npm:^5.58.9"
     concurrently: "npm:^9.2.1"
     cors: "npm:^2.8.5"
     csv-parse: "npm:^6.1.0"
