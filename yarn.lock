@@ -590,9 +590,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:6.14.0":
-  version: 6.14.0
-  resolution: "@prisma/client@npm:6.14.0"
+"@prisma/client@npm:6.16.3":
+  version: 6.16.3
+  resolution: "@prisma/client@npm:6.16.3"
   peerDependencies:
     prisma: "*"
     typescript: ">=5.1.0"
@@ -601,7 +601,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/9019cea9a65012ca2237d52adfd22ad02faf829ff9d1636d288b47e9a5ba61b1fa0595eed2e085abb1427949d1a6f9b48c161bb92f02ccc0caa5c22009663593
+  checksum: 10c0/9a09642aa69e36dcdde448a30190b102ab8ca5f32da9a4309b29b068b42546e55297edfaf9e7f393028c80a52faea4542229fce5499d4e8874ea6f0d92b6a01d
   languageName: node
   linkType: hard
 
@@ -2906,7 +2906,7 @@ __metadata:
     "@bull-board/api": "npm:^6.13.0"
     "@bull-board/express": "npm:^6.13.0"
     "@faker-js/faker": "npm:^10.0.0"
-    "@prisma/client": "npm:6.14.0"
+    "@prisma/client": "npm:6.16.3"
     "@types/bcryptjs": "npm:^3.0.0"
     "@types/cors": "npm:^2.8.19"
     "@types/express": "npm:^5.0.3"
