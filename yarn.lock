@@ -5,7 +5,18 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@bull-board/api@npm:6.13.0, @bull-board/api@npm:^6.13.0":
+"@bull-board/api@npm:6.14.0":
+  version: 6.14.0
+  resolution: "@bull-board/api@npm:6.14.0"
+  dependencies:
+    redis-info: "npm:^3.1.0"
+  peerDependencies:
+    "@bull-board/ui": 6.14.0
+  checksum: 10c0/f23076806c0b325e2fbcf45a6559efa31f33e73f78968c88f01bc8e40665a960b1e14d7b0267cb80f8e89f36f5114ef58b66784e83eb83f21af23969542a2cf7
+  languageName: node
+  linkType: hard
+
+"@bull-board/api@npm:^6.13.0":
   version: 6.13.0
   resolution: "@bull-board/api@npm:6.13.0"
   dependencies:
@@ -16,24 +27,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bull-board/express@npm:^6.13.0":
-  version: 6.13.0
-  resolution: "@bull-board/express@npm:6.13.0"
+"@bull-board/express@npm:^6.14.0":
+  version: 6.14.0
+  resolution: "@bull-board/express@npm:6.14.0"
   dependencies:
-    "@bull-board/api": "npm:6.13.0"
-    "@bull-board/ui": "npm:6.13.0"
+    "@bull-board/api": "npm:6.14.0"
+    "@bull-board/ui": "npm:6.14.0"
     ejs: "npm:^3.1.10"
     express: "npm:^4.21.1 || ^5.0.0"
-  checksum: 10c0/766125212b63d9ac802af863e4710875c876c84c03e29efa45b4fc7835bf4122db89b9b6e7cbc89db0087d5afe61fd476d1701933f75b9ab92537e08a1bb75e2
+  checksum: 10c0/54284f8f935aebce1be18e15427df1922cbeb5510c6264819f34d11ba6217cd4ef923cb1649c0b6d960c66641917c70884ede71a2d19c99eb98a39c6202beb75
   languageName: node
   linkType: hard
 
-"@bull-board/ui@npm:6.13.0":
-  version: 6.13.0
-  resolution: "@bull-board/ui@npm:6.13.0"
+"@bull-board/ui@npm:6.14.0":
+  version: 6.14.0
+  resolution: "@bull-board/ui@npm:6.14.0"
   dependencies:
-    "@bull-board/api": "npm:6.13.0"
-  checksum: 10c0/aa755a14113d19d960eaa61d568a56c843e43cb741b3d65868c43d1444783bafdb2b1ebfd9c2f7031bd792f797696fbaabb8b40ab7766e9e0d86b79b1e1a2202
+    "@bull-board/api": "npm:6.14.0"
+  checksum: 10c0/852dc8008a59bb9016536cc81d2a5bf5d2e054240f832d8ecac0c63ac7d1be21a8683246fcd5d2272f0c17311f6508f78a183120d461a464bf67144cf441f3c4
   languageName: node
   linkType: hard
 
@@ -2904,7 +2915,7 @@ __metadata:
   resolution: "hbt-crypto-wallet-api@workspace:."
   dependencies:
     "@bull-board/api": "npm:^6.13.0"
-    "@bull-board/express": "npm:^6.13.0"
+    "@bull-board/express": "npm:^6.14.0"
     "@faker-js/faker": "npm:^10.0.0"
     "@prisma/client": "npm:6.14.0"
     "@types/bcryptjs": "npm:^3.0.0"
